@@ -8,10 +8,6 @@ import static org.hamcrest.Matchers.*;
 public class CliArgsScanAndPopulateTest {
 	@Test
 	public void testTargetOptionIsSetWhenOptionIsPresentInArgs() {
-		class Target {
-			@Option("-o")
-			private String option;
-		}
 		Target target = new Target();
 
 		String expectedValue = "value";
@@ -22,25 +18,13 @@ public class CliArgsScanAndPopulateTest {
 
 	@Test
 	public void testTargetOptionIsNotSetWhenArgsIsEmptyArray() {
-		class Target {
-			@Option("-o")
-			private String option;
-		}
 		Target target = new Target();
-
-		String[] args = {};
-
-		assertThat(CliArgs.scan(target).andPopulateWith(args).option, is(nullValue()));
+		assertThat(CliArgs.scan(target).andPopulateWith(new String[]{}).option, is(nullValue()));
 	}
 
 	@Test
 	public void testTargetOptionIsNotSetWhenArgsIsNull() {
-		class Target {
-			@Option("-o")
-			private String option;
-		}
 		Target target = new Target();
-
 		assertThat(CliArgs.scan(target).andPopulateWith(null).option, is(nullValue()));
 	}
 
@@ -48,5 +32,10 @@ public class CliArgsScanAndPopulateTest {
 	public void testPopulateWithArgsReturnsNullWhenScanTargetIsNull() {
 		String[] args = {"-o", "value"};
 		assertThat(CliArgs.scan(null).andPopulateWith(args), is(nullValue()));
+	}
+
+	private class Target {
+		@Option("-o")
+		private String option;
 	}
 }
