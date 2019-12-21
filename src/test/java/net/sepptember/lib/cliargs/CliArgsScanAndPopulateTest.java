@@ -7,35 +7,71 @@ import static org.hamcrest.Matchers.*;
 
 public class CliArgsScanAndPopulateTest {
 	@Test
-	public void testTargetOptionIsSetWhenOptionIsPresentInArgs() {
+	public void testTargetStringOptionIsSetWhenOptionIsPresentInArgs() {
 		Target target = new Target();
 
 		String expectedValue = "value";
-		String[] args = {"-o", expectedValue};
+		String[] args = {"-s", expectedValue};
 
-		assertThat(CliArgs.scan(target).andPopulateWith(args).option, is(equalTo(expectedValue)));
+		assertThat(CliArgs.scan(target).andPopulateWith(args).stringValue, is(equalTo(expectedValue)));
+	}
+
+	@Test
+	public void testTargetIntOptionIsSetWhenOptionIsPresentInArgs() {
+		Target target = new Target();
+
+		int expectedValue = 17;
+		String[] args = {"-i", Integer.toString(expectedValue)};
+
+		assertThat(CliArgs.scan(target).andPopulateWith(args).intValue, is(equalTo(expectedValue)));
+	}
+
+	@Test
+	public void testTargetIntegerOptionIsSetWhenOptionIsPresentInArgs() {
+		Target target = new Target();
+
+		int expectedValue = 19;
+		String[] args = {"-I", Integer.toString(expectedValue)};
+
+		assertThat(CliArgs.scan(target).andPopulateWith(args).integerValue, is(equalTo(expectedValue)));
+	}
+
+	@Test
+	public void testTargetOptionIsIgnoredWhenFieldTypeIsNotSupported() {
+		Target target = new Target();
+		String[] args = {"-u", "value"};
+		assertThat(CliArgs.scan(target).andPopulateWith(args).unsupportedValue, is(nullValue()));
 	}
 
 	@Test
 	public void testTargetOptionIsNotSetWhenArgsIsEmptyArray() {
 		Target target = new Target();
-		assertThat(CliArgs.scan(target).andPopulateWith(new String[]{}).option, is(nullValue()));
+		assertThat(CliArgs.scan(target).andPopulateWith(new String[]{}).stringValue, is(nullValue()));
 	}
 
 	@Test
 	public void testTargetOptionIsNotSetWhenArgsIsNull() {
 		Target target = new Target();
-		assertThat(CliArgs.scan(target).andPopulateWith(null).option, is(nullValue()));
+		assertThat(CliArgs.scan(target).andPopulateWith(null).stringValue, is(nullValue()));
 	}
 
 	@Test
 	public void testPopulateWithArgsReturnsNullWhenScanTargetIsNull() {
-		String[] args = {"-o", "value"};
+		String[] args = {"-s", "value"};
 		assertThat(CliArgs.scan(null).andPopulateWith(args), is(nullValue()));
 	}
 
 	private class Target {
-		@Option("-o")
-		private String option;
+		@Option("-s")
+		private String stringValue;
+
+		@Option("-i")
+		private int intValue;
+
+		@Option("-I")
+		private Integer integerValue;
+
+		@Option("-u")
+		private Object unsupportedValue;
 	}
 }

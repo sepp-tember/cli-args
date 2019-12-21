@@ -1,9 +1,11 @@
 package net.sepptember.lib.cliargs;
 
 import net.sepptember.lib.cliargs.internal.ImmutableList;
+import net.sepptember.lib.cliargs.internal.NoSuchTransformerException;
 import net.sepptember.lib.cliargs.internal.SeparatedOptionFilter;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class CliArgs<T> {
 	private final T target;
@@ -21,7 +23,14 @@ public class CliArgs<T> {
 		if (target != null) {
 			rootFilter = Arrays.stream(target.getClass().getDeclaredFields())
 					.filter(field -> field.isAnnotationPresent(Option.class))
-					.map(field -> new SeparatedOptionFilter(target, field, field.getAnnotation(Option.class).value()))
+					.map(field -> {
+						try {
+							return new SeparatedOptionFilter(target, field, field.getAnnotation(Option.class).value());
+						} catch (NoSuchTransformerException e) {
+							return null;
+						}
+					})
+					.filter(Objects::nonNull)
 					.reduce((collectedFilters, filter) -> filter.add(collectedFilters))
 					.orElse(null);
 		}

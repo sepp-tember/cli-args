@@ -6,9 +6,9 @@ import org.mockito.Mockito;
 import java.lang.reflect.Field;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 class SeparatedOptionFilterTest {
 
@@ -23,7 +23,8 @@ class SeparatedOptionFilterTest {
 	}
 
 	@Test
-	public void testProcessReturnsGivenArgsWithoutOptionAndSucceedingValueWhenFirstArgIsMatching() {
+	public void testProcessReturnsGivenArgsWithoutOptionAndSucceedingValueWhenFirstArgIsMatching()
+			throws NoSuchTransformerException {
 		ImmutableList<String> args = ImmutableList.of(optionName, "value", "someOtherValue");
 		SeparatedOptionFilter filter = new SeparatedOptionFilter(scanTarget, field, optionName);
 
@@ -31,7 +32,7 @@ class SeparatedOptionFilterTest {
 	}
 
 	@Test
-	public void testProcessSetFieldInTargetToSucceedingValueWhenFirstArgIsMatching() {
+	public void testProcessSetFieldInTargetToSucceedingValueWhenFirstArgIsMatching() throws NoSuchTransformerException {
 		String expectedValue = "value";
 		ImmutableList<String> args = ImmutableList.of(optionName, expectedValue);
 		SeparatedOptionFilter filter = new SeparatedOptionFilter(scanTarget, field, optionName);
@@ -42,7 +43,8 @@ class SeparatedOptionFilterTest {
 	}
 
 	@Test
-	public void testProcessReturnsEmptyArrayWhenFirstArgIsMatchingButNoValueIsSucceeding() {
+	public void testProcessReturnsEmptyArrayWhenFirstArgIsMatchingButNoValueIsSucceeding()
+			throws NoSuchTransformerException {
 		ImmutableList<String> args = ImmutableList.of(optionName);
 		SeparatedOptionFilter filter = new SeparatedOptionFilter(scanTarget, field, optionName);
 
@@ -50,7 +52,8 @@ class SeparatedOptionFilterTest {
 	}
 
 	@Test
-	public void testProcessDoesNotModifyFieldInTargetWhenFirstArgIsMatchingButNoValueIsSucceeding() {
+	public void testProcessDoesNotModifyFieldInTargetWhenFirstArgIsMatchingButNoValueIsSucceeding()
+			throws NoSuchTransformerException {
 		String expectedValue = "value";
 		ImmutableList<String> args = ImmutableList.of(optionName);
 		scanTarget.option = expectedValue;
@@ -62,7 +65,8 @@ class SeparatedOptionFilterTest {
 	}
 
 	@Test
-	public void testProcessReturnsUnmodifiedArrayWhenFirstArgIsNotMatchingAndNoNextFilterIsSet() {
+	public void testProcessReturnsUnmodifiedArrayWhenFirstArgIsNotMatchingAndNoNextFilterIsSet()
+			throws NoSuchTransformerException {
 		ImmutableList<String> args = ImmutableList.of("-otherOption", "value", optionName);
 		SeparatedOptionFilter filter = new SeparatedOptionFilter(scanTarget, field, optionName);
 
@@ -70,7 +74,7 @@ class SeparatedOptionFilterTest {
 	}
 
 	@Test
-	public void testProcessDoesNotModifyFieldInTargetWhenFirstArgIsNotMatching() {
+	public void testProcessDoesNotModifyFieldInTargetWhenFirstArgIsNotMatching() throws NoSuchTransformerException {
 		String expectedValue = "value";
 		ImmutableList<String> args = ImmutableList.of("-otherOption", "value", optionName);
 		scanTarget.option = expectedValue;
@@ -82,7 +86,8 @@ class SeparatedOptionFilterTest {
 	}
 
 	@Test
-	public void testProcessCallsNextFilterWithArgsAndReturnsResultOfNextFilterWhenFirstArgIsNotMatching() {
+	public void testProcessCallsNextFilterWithArgsAndReturnsResultOfNextFilterWhenFirstArgIsNotMatching()
+			throws NoSuchTransformerException {
 		ImmutableList<String> args = ImmutableList.of("-otherOption", "value", optionName);
 		ImmutableList<String> processedArgs = ImmutableList.of(optionName);
 		SeparatedOptionFilter nextFilter = mock(SeparatedOptionFilter.class);
@@ -95,14 +100,14 @@ class SeparatedOptionFilterTest {
 	}
 
 	@Test
-	public void testProcessReturnsEmptyArrayWhenArgsIsEmpty() {
+	public void testProcessReturnsEmptyArrayWhenArgsIsEmpty() throws NoSuchTransformerException {
 		SeparatedOptionFilter filter = new SeparatedOptionFilter(scanTarget, field, "-option");
 
 		assertThat(filter.process(ImmutableList.of()), is(emptyIterable()));
 	}
 
 	@Test
-	public void testProcessDoesNotModifyFieldInTargetWhenArgsIsEmpty() {
+	public void testProcessDoesNotModifyFieldInTargetWhenArgsIsEmpty() throws NoSuchTransformerException {
 		String expectedValue = "value";
 		scanTarget.option = expectedValue;
 		SeparatedOptionFilter filter = new SeparatedOptionFilter(scanTarget, field, optionName);
@@ -110,6 +115,20 @@ class SeparatedOptionFilterTest {
 		filter.process(ImmutableList.of());
 
 		assertThat(scanTarget.option, is(equalTo(expectedValue)));
+	}
+
+	@Test
+	public void testProcessUsesTransformerWhenSettingValueInTargetField() throws TransformationFailedException {
+		String inputValue = "13";
+		String outputValue = "17";
+		Transformer transformer = mock(Transformer.class);
+		when(transformer.transform(inputValue)).thenReturn(outputValue);
+		SeparatedOptionFilter filter = new SeparatedOptionFilter(scanTarget, field, optionName, transformer);
+
+		filter.process(ImmutableList.of(optionName, inputValue));
+
+		assertThat(scanTarget.option, is(equalTo(outputValue)));
+		verify(transformer).transform(inputValue);
 	}
 
 	private class Target {
