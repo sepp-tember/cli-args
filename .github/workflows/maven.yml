@@ -21,3 +21,7 @@ jobs:
             ${{ runner.os }}-maven-
       - name: Test with Maven
         run: mvn test
+      - uses: actions/upload-artifact@v1
+        with:
+          name: test-coverage
+          path: target/site/jacoco
