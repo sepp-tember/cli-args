@@ -9,7 +9,9 @@ class TransformerFactory {
 	private static final Map<Class<?>, Supplier<Transformer<?>>> mapping = Map.ofEntries(
 			Map.entry(String.class, StringTransformer::new),
 			Map.entry(Integer.class, IntegerTransformer::new),
-			Map.entry(int.class, IntegerTransformer::new)
+			Map.entry(int.class, IntegerTransformer::new),
+			Map.entry(Byte.class, ByteTransformer::new),
+			Map.entry(byte.class, ByteTransformer::new)
 	);
 
 	Transformer createTransformerFor(Field field) throws NoSuchTransformerException {

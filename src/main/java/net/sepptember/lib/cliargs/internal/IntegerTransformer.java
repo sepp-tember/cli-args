@@ -1,16 +1,12 @@
 package net.sepptember.lib.cliargs.internal;
 
-public class IntegerTransformer implements Transformer<Integer> {
+public class IntegerTransformer extends NumberTransformer<Integer> {
+	IntegerTransformer() {
+		super(Integer.class);
+	}
+
 	@Override
-	public Integer transform(String value) throws TransformationFailedException {
-		if (value == null) {
-			return null;
-		} else {
-			try {
-				return Integer.parseInt(value);
-			} catch (Exception thrown) {
-				throw new TransformationFailedException(Integer.class, thrown);
-			}
-		}
+	protected Integer unguardedTransform(String value) {
+		return Integer.parseInt(value);
 	}
 }

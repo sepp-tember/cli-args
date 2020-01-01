@@ -19,9 +19,9 @@ class TransformerFactoryTest {
 	}
 
 	@Test
-	public void testCreateTransformerForIntegerFieldReturnsIntegerTransformer()
+	public void testCreateTransformerForIntegerObjectFieldReturnsIntegerTransformer()
 			throws NoSuchFieldException, NoSuchTransformerException {
-		Field integerField = Fields.class.getDeclaredField("integerField");
+		Field integerField = Fields.class.getDeclaredField("integerObjectField");
 		TransformerFactory factory = new TransformerFactory();
 
 		assertThat(factory.createTransformerFor(integerField), isA(IntegerTransformer.class));
@@ -37,6 +37,24 @@ class TransformerFactoryTest {
 	}
 
 	@Test
+	public void testCreateTransformerForByteObjectFieldReturnsByteTransformer()
+			throws NoSuchFieldException, NoSuchTransformerException {
+		Field byteObjectField = Fields.class.getDeclaredField("byteObjectField");
+		TransformerFactory factory = new TransformerFactory();
+
+		assertThat(factory.createTransformerFor(byteObjectField), isA(ByteTransformer.class));
+	}
+
+	@Test
+	public void testCreateTransformerForByteFieldReturnsByteTransformer()
+			throws NoSuchFieldException, NoSuchTransformerException {
+		Field byteField = Fields.class.getDeclaredField("byteField");
+		TransformerFactory factory = new TransformerFactory();
+
+		assertThat(factory.createTransformerFor(byteField), isA(ByteTransformer.class));
+	}
+
+	@Test
 	public void testCreateTransformerForObjectFieldThrowsException() throws NoSuchFieldException {
 		Field objectField = Fields.class.getDeclaredField("objectField");
 		TransformerFactory factory = new TransformerFactory();
@@ -46,8 +64,10 @@ class TransformerFactoryTest {
 
 	private static class Fields {
 		String stringField;
-		Integer integerField;
+		Integer integerObjectField;
 		int intField;
+		Byte byteObjectField;
+		byte byteField;
 		Object objectField;
 	}
 }

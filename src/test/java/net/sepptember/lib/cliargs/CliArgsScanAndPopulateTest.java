@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class CliArgsScanAndPopulateTest {
 	@Test
@@ -27,13 +28,33 @@ public class CliArgsScanAndPopulateTest {
 	}
 
 	@Test
-	public void testTargetIntegerOptionIsSetWhenOptionIsPresentInArgs() {
+	public void testTargetIntegerObjectOptionIsSetWhenOptionIsPresentInArgs() {
 		Target target = new Target();
 
 		int expectedValue = 19;
 		String[] args = {"-I", Integer.toString(expectedValue)};
 
-		assertThat(CliArgs.scan(target).andPopulateWith(args).integerValue, is(equalTo(expectedValue)));
+		assertThat(CliArgs.scan(target).andPopulateWith(args).integerObjectValue, is(equalTo(expectedValue)));
+	}
+
+	@Test
+	public void testTargetByteOptionIsSetWhenOptionIsPresentInArgs() {
+		Target target = new Target();
+
+		byte expectedValue = 3;
+		String[] args = {"-b", Integer.toString(expectedValue)};
+
+		assertThat(CliArgs.scan(target).andPopulateWith(args).byteValue, is(equalTo(expectedValue)));
+	}
+
+	@Test
+	public void testTargetByteObjectOptionIsSetWhenOptionIsPresentInArgs() {
+		Target target = new Target();
+
+		byte expectedValue = 5;
+		String[] args = {"-B", Integer.toString(expectedValue)};
+
+		assertThat(CliArgs.scan(target).andPopulateWith(args).byteObjectValue, is(equalTo(expectedValue)));
 	}
 
 	@Test
@@ -69,7 +90,13 @@ public class CliArgsScanAndPopulateTest {
 		private int intValue;
 
 		@Option("-I")
-		private Integer integerValue;
+		private Integer integerObjectValue;
+
+		@Option("-b")
+		private byte byteValue;
+
+		@Option("-B")
+		private Byte byteObjectValue;
 
 		@Option("-u")
 		private Object unsupportedValue;

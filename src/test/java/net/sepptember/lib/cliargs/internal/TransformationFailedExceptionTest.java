@@ -16,4 +16,9 @@ class TransformationFailedExceptionTest {
 		RuntimeException cause = new RuntimeException();
 		assertThat(new TransformationFailedException(Object.class, cause).getCause(), is(sameInstance(cause)));
 	}
+
+	@Test
+	public void testTransformationTypeIsSetInException() {
+		assertThat(new TransformationFailedException(Byte.class, null).getTransformationType(), is(Byte.class));
+	}
 }
