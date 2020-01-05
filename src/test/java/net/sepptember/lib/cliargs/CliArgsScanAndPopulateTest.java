@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.fail;
 
 public class CliArgsScanAndPopulateTest {
 	@Test
@@ -12,7 +11,7 @@ public class CliArgsScanAndPopulateTest {
 		Target target = new Target();
 
 		String expectedValue = "value";
-		String[] args = {"-s", expectedValue};
+		String[] args = {"-t", expectedValue};
 
 		assertThat(CliArgs.scan(target).andPopulateWith(args).stringValue, is(equalTo(expectedValue)));
 	}
@@ -58,6 +57,26 @@ public class CliArgsScanAndPopulateTest {
 	}
 
 	@Test
+	public void testTargetShortOptionIsSetWhenOptionIsPresentInArgs() {
+		Target target = new Target();
+
+		short expectedValue = 113;
+		String[] args = {"-s", Integer.toString(expectedValue)};
+
+		assertThat(CliArgs.scan(target).andPopulateWith(args).shortValue, is(equalTo(expectedValue)));
+	}
+
+	@Test
+	public void testTargetShortObjectOptionIsSetWhenOptionIsPresentInArgs() {
+		Target target = new Target();
+
+		short expectedValue = 117;
+		String[] args = {"-S", Integer.toString(expectedValue)};
+
+		assertThat(CliArgs.scan(target).andPopulateWith(args).shortObjectValue, is(equalTo(expectedValue)));
+	}
+
+	@Test
 	public void testTargetOptionIsIgnoredWhenFieldTypeIsNotSupported() {
 		Target target = new Target();
 		String[] args = {"-u", "value"};
@@ -78,12 +97,12 @@ public class CliArgsScanAndPopulateTest {
 
 	@Test
 	public void testPopulateWithArgsReturnsNullWhenScanTargetIsNull() {
-		String[] args = {"-s", "value"};
+		String[] args = {"-t", "value"};
 		assertThat(CliArgs.scan(null).andPopulateWith(args), is(nullValue()));
 	}
 
 	private class Target {
-		@Option("-s")
+		@Option("-t")
 		private String stringValue;
 
 		@Option("-i")
@@ -97,6 +116,12 @@ public class CliArgsScanAndPopulateTest {
 
 		@Option("-B")
 		private Byte byteObjectValue;
+
+		@Option("-s")
+		private short shortValue;
+
+		@Option("-S")
+		private Short shortObjectValue;
 
 		@Option("-u")
 		private Object unsupportedValue;

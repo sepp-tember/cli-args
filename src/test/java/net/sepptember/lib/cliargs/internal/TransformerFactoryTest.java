@@ -55,6 +55,24 @@ class TransformerFactoryTest {
 	}
 
 	@Test
+	public void testCreateTransformerForShortObjectFieldReturnsShortTransformer()
+			throws NoSuchFieldException, NoSuchTransformerException {
+		Field shortObjectField = Fields.class.getDeclaredField("shortObjectField");
+		TransformerFactory factory = new TransformerFactory();
+
+		assertThat(factory.createTransformerFor(shortObjectField), isA(ShortTransformer.class));
+	}
+
+	@Test
+	public void testCreateTransformerForShortFieldReturnsShortTransformer()
+			throws NoSuchFieldException, NoSuchTransformerException {
+		Field shortField = Fields.class.getDeclaredField("shortField");
+		TransformerFactory factory = new TransformerFactory();
+
+		assertThat(factory.createTransformerFor(shortField), isA(ShortTransformer.class));
+	}
+
+	@Test
 	public void testCreateTransformerForObjectFieldThrowsException() throws NoSuchFieldException {
 		Field objectField = Fields.class.getDeclaredField("objectField");
 		TransformerFactory factory = new TransformerFactory();
@@ -68,6 +86,8 @@ class TransformerFactoryTest {
 		int intField;
 		Byte byteObjectField;
 		byte byteField;
+		Short shortObjectField;
+		short shortField;
 		Object objectField;
 	}
 }
