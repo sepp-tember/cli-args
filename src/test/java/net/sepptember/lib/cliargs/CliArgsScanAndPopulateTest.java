@@ -77,6 +77,26 @@ public class CliArgsScanAndPopulateTest {
 	}
 
 	@Test
+	public void testTargetLongOptionIsSetWhenOptionIsPresentInArgs() {
+		Target target = new Target();
+
+		long expectedValue = 2147483651L;
+		String[] args = {"-l", Long.toString(expectedValue)};
+
+		assertThat(CliArgs.scan(target).andPopulateWith(args).longValue, is(equalTo(expectedValue)));
+	}
+
+	@Test
+	public void testTargetLongObjectOptionIsSetWhenOptionIsPresentInArgs() {
+		Target target = new Target();
+
+		long expectedValue = 2147483651L;
+		String[] args = {"-L", Long.toString(expectedValue)};
+
+		assertThat(CliArgs.scan(target).andPopulateWith(args).longObjectValue, is(equalTo(expectedValue)));
+	}
+
+	@Test
 	public void testTargetOptionIsIgnoredWhenFieldTypeIsNotSupported() {
 		Target target = new Target();
 		String[] args = {"-u", "value"};
@@ -122,6 +142,12 @@ public class CliArgsScanAndPopulateTest {
 
 		@Option("-S")
 		private Short shortObjectValue;
+
+		@Option("-l")
+		private long longValue;
+
+		@Option("-L")
+		private Long longObjectValue;
 
 		@Option("-u")
 		private Object unsupportedValue;

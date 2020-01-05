@@ -7,29 +7,29 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.*;
 
-class IntegerTransformerTest {
+class LongTransformerTest {
 	@Test
-	public void testTransformIntegerAsStringToInteger() {
+	public void testTransformLongAsStringToLong() {
 		assertAll(
-				() -> assertThat(new IntegerTransformer().transform("2147483647"), is(2147483647)),
-				() -> assertThat(new IntegerTransformer().transform("-2147483648"), is(-2147483648))
+				() -> assertThat(new LongTransformer().transform("9223372036854775807"), is(9223372036854775807L)),
+				() -> assertThat(new LongTransformer().transform("-9223372036854775808"), is(-9223372036854775808L))
 		);
 	}
 
 	@Test
-	public void testTransformThrowsTransformationFailedExceptionWhenGivenStringIsNoInteger() {
-		IntegerTransformer transformer = new IntegerTransformer();
+	public void testTransformThrowsTransformationFailedExceptionWhenGivenStringIsNoLong() {
+		LongTransformer transformer = new LongTransformer();
 		assertAll(
 				() -> assertThrows(TransformationFailedException.class, () -> transformer.transform("abc")),
 				() -> assertThrows(TransformationFailedException.class, () -> transformer.transform("1 def")),
 				() -> assertThrows(TransformationFailedException.class, () -> transformer.transform("1.1")),
-				() -> assertThrows(TransformationFailedException.class, () -> transformer.transform("2147483648")),
-				() -> assertThrows(TransformationFailedException.class, () -> transformer.transform("-2147483649"))
+				() -> assertThrows(TransformationFailedException.class, () -> transformer.transform("9223372036854775808")),
+				() -> assertThrows(TransformationFailedException.class, () -> transformer.transform("-9223372036854775809"))
 		);
 	}
 
 	@Test
 	public void testTransformReturnsNullIfNullIsGiven() throws TransformationFailedException {
-		assertThat(new IntegerTransformer().transform(null), is(nullValue()));
+		assertThat(new LongTransformer().transform(null), is(nullValue()));
 	}
 }

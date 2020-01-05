@@ -13,7 +13,9 @@ class TransformerFactory {
 			Map.entry(Byte.class, ByteTransformer::new),
 			Map.entry(byte.class, ByteTransformer::new),
 			Map.entry(Short.class, ShortTransformer::new),
-			Map.entry(short.class, ShortTransformer::new)
+			Map.entry(short.class, ShortTransformer::new),
+			Map.entry(Long.class, LongTransformer::new),
+			Map.entry(long.class, LongTransformer::new)
 	);
 
 	Transformer createTransformerFor(Field field) throws NoSuchTransformerException {
