@@ -117,6 +117,26 @@ public class CliArgsScanAndPopulateTest {
 	}
 
 	@Test
+	public void testTargetFloatOptionIsSetWhenOptionIsPresentInArgs() {
+		Target target = new Target();
+
+		float expectedValue = 1.1e24f;
+		String[] args = {"-f", Float.toString(expectedValue)};
+
+		assertThat(CliArgs.scan(target).andPopulateWith(args).floatValue, is(equalTo(expectedValue)));
+	}
+
+	@Test
+	public void testTargetFloatObjectOptionIsSetWhenOptionIsPresentInArgs() {
+		Target target = new Target();
+
+		float expectedValue = 1.2e23f;
+		String[] args = {"-F", Float.toString(expectedValue)};
+
+		assertThat(CliArgs.scan(target).andPopulateWith(args).floatObjectValue, is(equalTo(expectedValue)));
+	}
+
+	@Test
 	public void testTargetOptionIsIgnoredWhenFieldTypeIsNotSupported() {
 		Target target = new Target();
 		String[] args = {"-u", "value"};
@@ -174,6 +194,12 @@ public class CliArgsScanAndPopulateTest {
 
 		@Option("-D")
 		private Double doubleObjectValue;
+
+		@Option("-f")
+		private float floatValue;
+
+		@Option("-F")
+		private Float floatObjectValue;
 
 		@Option("-u")
 		private Object unsupportedValue;
