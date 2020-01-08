@@ -91,6 +91,24 @@ class TransformerFactoryTest {
 	}
 
 	@Test
+	public void testCreateTransformerForDoubleObjectFieldReturnsDoubleTransformer()
+			throws NoSuchFieldException, NoSuchTransformerException {
+		Field doubleObjectField = Fields.class.getDeclaredField("doubleObjectField");
+		TransformerFactory factory = new TransformerFactory();
+
+		assertThat(factory.createTransformerFor(doubleObjectField), isA(DoubleTransformer.class));
+	}
+
+	@Test
+	public void testCreateTransformerForDoubleFieldReturnsDoubleTransformer()
+			throws NoSuchFieldException, NoSuchTransformerException {
+		Field doubleField = Fields.class.getDeclaredField("doubleField");
+		TransformerFactory factory = new TransformerFactory();
+
+		assertThat(factory.createTransformerFor(doubleField), isA(DoubleTransformer.class));
+	}
+
+	@Test
 	public void testCreateTransformerForObjectFieldThrowsException() throws NoSuchFieldException {
 		Field objectField = Fields.class.getDeclaredField("objectField");
 		TransformerFactory factory = new TransformerFactory();
@@ -108,6 +126,8 @@ class TransformerFactoryTest {
 		short shortField;
 		Long longObjectField;
 		long longField;
+		Double doubleObjectField;
+		double doubleField;
 		Object objectField;
 	}
 }
