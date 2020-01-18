@@ -19,7 +19,9 @@ class TransformerFactory {
 			Map.entry(Double.class, DoubleTransformer::new),
 			Map.entry(double.class, DoubleTransformer::new),
 			Map.entry(Float.class, FloatTransformer::new),
-			Map.entry(float.class, FloatTransformer::new)
+			Map.entry(float.class, FloatTransformer::new),
+			Map.entry(Boolean.class, BooleanTransformer::new),
+			Map.entry(boolean.class, BooleanTransformer::new)
 	);
 
 	Transformer createTransformerFor(Field field) throws NoSuchTransformerException {

@@ -6,12 +6,29 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class CliArgsScanAndPopulateTest {
+
+	private static final String STRING_OPTION = "-String";
+	private static final String INT_PRIMITIVE_OPTION = "-int";
+	private static final String INT_OBJECT_OPTION = "-Integer";
+	private static final String BYTE_PRIMITIVE_OPTION = "-byte";
+	private static final String BYTE_OBJECT_OPTION = "-Byte";
+	private static final String SHORT_PRIMITIVE_OPTION = "-short";
+	private static final String SHORT_OBJECT_OPTION = "-Short";
+	private static final String LONG_PRIMITIVE_OPTION = "-long";
+	private static final String LONG_OBJECT_OPTION = "-Long";
+	private static final String DOUBLE_PRIMITIVE_OPTION = "-double";
+	private static final String DOUBLE_OBJECT_OPTION = "-Double";
+	private static final String FLOAT_PRIMITIVE_OPTION = "-float";
+	private static final String FLOAT_OBJECT_OPTION = "-Float";
+	private static final String BOOLEAN_PRIMITIVE_OPTION = "-boolean";
+	private static final String BOOLEAN_OBJECT_OPTION = "-Boolean";
+
 	@Test
 	public void testTargetStringOptionIsSetWhenOptionIsPresentInArgs() {
 		Target target = new Target();
 
 		String expectedValue = "value";
-		String[] args = {"-t", expectedValue};
+		String[] args = {STRING_OPTION, expectedValue};
 
 		assertThat(CliArgs.scan(target).andPopulateWith(args).stringValue, is(equalTo(expectedValue)));
 	}
@@ -21,7 +38,7 @@ public class CliArgsScanAndPopulateTest {
 		Target target = new Target();
 
 		int expectedValue = 17;
-		String[] args = {"-i", Integer.toString(expectedValue)};
+		String[] args = {INT_PRIMITIVE_OPTION, Integer.toString(expectedValue)};
 
 		assertThat(CliArgs.scan(target).andPopulateWith(args).intValue, is(equalTo(expectedValue)));
 	}
@@ -31,7 +48,7 @@ public class CliArgsScanAndPopulateTest {
 		Target target = new Target();
 
 		int expectedValue = 19;
-		String[] args = {"-I", Integer.toString(expectedValue)};
+		String[] args = {INT_OBJECT_OPTION, Integer.toString(expectedValue)};
 
 		assertThat(CliArgs.scan(target).andPopulateWith(args).integerObjectValue, is(equalTo(expectedValue)));
 	}
@@ -41,7 +58,7 @@ public class CliArgsScanAndPopulateTest {
 		Target target = new Target();
 
 		byte expectedValue = 3;
-		String[] args = {"-b", Integer.toString(expectedValue)};
+		String[] args = {BYTE_PRIMITIVE_OPTION, Integer.toString(expectedValue)};
 
 		assertThat(CliArgs.scan(target).andPopulateWith(args).byteValue, is(equalTo(expectedValue)));
 	}
@@ -51,7 +68,7 @@ public class CliArgsScanAndPopulateTest {
 		Target target = new Target();
 
 		byte expectedValue = 5;
-		String[] args = {"-B", Integer.toString(expectedValue)};
+		String[] args = {BYTE_OBJECT_OPTION, Integer.toString(expectedValue)};
 
 		assertThat(CliArgs.scan(target).andPopulateWith(args).byteObjectValue, is(equalTo(expectedValue)));
 	}
@@ -61,7 +78,7 @@ public class CliArgsScanAndPopulateTest {
 		Target target = new Target();
 
 		short expectedValue = 113;
-		String[] args = {"-s", Integer.toString(expectedValue)};
+		String[] args = {SHORT_PRIMITIVE_OPTION, Integer.toString(expectedValue)};
 
 		assertThat(CliArgs.scan(target).andPopulateWith(args).shortValue, is(equalTo(expectedValue)));
 	}
@@ -71,7 +88,7 @@ public class CliArgsScanAndPopulateTest {
 		Target target = new Target();
 
 		short expectedValue = 117;
-		String[] args = {"-S", Integer.toString(expectedValue)};
+		String[] args = {SHORT_OBJECT_OPTION, Integer.toString(expectedValue)};
 
 		assertThat(CliArgs.scan(target).andPopulateWith(args).shortObjectValue, is(equalTo(expectedValue)));
 	}
@@ -81,7 +98,7 @@ public class CliArgsScanAndPopulateTest {
 		Target target = new Target();
 
 		long expectedValue = 2147483651L;
-		String[] args = {"-l", Long.toString(expectedValue)};
+		String[] args = {LONG_PRIMITIVE_OPTION, Long.toString(expectedValue)};
 
 		assertThat(CliArgs.scan(target).andPopulateWith(args).longValue, is(equalTo(expectedValue)));
 	}
@@ -91,7 +108,7 @@ public class CliArgsScanAndPopulateTest {
 		Target target = new Target();
 
 		long expectedValue = 2147483651L;
-		String[] args = {"-L", Long.toString(expectedValue)};
+		String[] args = {LONG_OBJECT_OPTION, Long.toString(expectedValue)};
 
 		assertThat(CliArgs.scan(target).andPopulateWith(args).longObjectValue, is(equalTo(expectedValue)));
 	}
@@ -101,7 +118,7 @@ public class CliArgsScanAndPopulateTest {
 		Target target = new Target();
 
 		double expectedValue = 1.1e123;
-		String[] args = {"-d", Double.toString(expectedValue)};
+		String[] args = {DOUBLE_PRIMITIVE_OPTION, Double.toString(expectedValue)};
 
 		assertThat(CliArgs.scan(target).andPopulateWith(args).doubleValue, is(equalTo(expectedValue)));
 	}
@@ -111,7 +128,7 @@ public class CliArgsScanAndPopulateTest {
 		Target target = new Target();
 
 		double expectedValue = 1.2e234;
-		String[] args = {"-D", Double.toString(expectedValue)};
+		String[] args = {DOUBLE_OBJECT_OPTION, Double.toString(expectedValue)};
 
 		assertThat(CliArgs.scan(target).andPopulateWith(args).doubleObjectValue, is(equalTo(expectedValue)));
 	}
@@ -121,7 +138,7 @@ public class CliArgsScanAndPopulateTest {
 		Target target = new Target();
 
 		float expectedValue = 1.1e24f;
-		String[] args = {"-f", Float.toString(expectedValue)};
+		String[] args = {FLOAT_PRIMITIVE_OPTION, Float.toString(expectedValue)};
 
 		assertThat(CliArgs.scan(target).andPopulateWith(args).floatValue, is(equalTo(expectedValue)));
 	}
@@ -131,9 +148,29 @@ public class CliArgsScanAndPopulateTest {
 		Target target = new Target();
 
 		float expectedValue = 1.2e23f;
-		String[] args = {"-F", Float.toString(expectedValue)};
+		String[] args = {FLOAT_OBJECT_OPTION, Float.toString(expectedValue)};
 
 		assertThat(CliArgs.scan(target).andPopulateWith(args).floatObjectValue, is(equalTo(expectedValue)));
+	}
+
+	@Test
+	public void testTargetBooleanOptionIsSetWhenOptionIsPresentInArgs() {
+		Target target = new Target();
+
+		boolean expectedValue = true;
+		String[] args = {BOOLEAN_PRIMITIVE_OPTION, Boolean.toString(expectedValue)};
+
+		assertThat(CliArgs.scan(target).andPopulateWith(args).booleanValue, is(equalTo(expectedValue)));
+	}
+
+	@Test
+	public void testTargetBooleanObjectOptionIsSetWhenOptionIsPresentInArgs() {
+		Target target = new Target();
+
+		boolean expectedValue = true;
+		String[] args = {BOOLEAN_OBJECT_OPTION, Boolean.toString(expectedValue)};
+
+		assertThat(CliArgs.scan(target).andPopulateWith(args).booleanObjectValue, is(equalTo(expectedValue)));
 	}
 
 	@Test
@@ -157,49 +194,55 @@ public class CliArgsScanAndPopulateTest {
 
 	@Test
 	public void testPopulateWithArgsReturnsNullWhenScanTargetIsNull() {
-		String[] args = {"-t", "value"};
+		String[] args = {STRING_OPTION, "value"};
 		assertThat(CliArgs.scan(null).andPopulateWith(args), is(nullValue()));
 	}
 
 	private class Target {
-		@Option("-t")
+		@Option(STRING_OPTION)
 		private String stringValue;
 
-		@Option("-i")
+		@Option(INT_PRIMITIVE_OPTION)
 		private int intValue;
 
-		@Option("-I")
+		@Option(INT_OBJECT_OPTION)
 		private Integer integerObjectValue;
 
-		@Option("-b")
+		@Option(BYTE_PRIMITIVE_OPTION)
 		private byte byteValue;
 
-		@Option("-B")
+		@Option(BYTE_OBJECT_OPTION)
 		private Byte byteObjectValue;
 
-		@Option("-s")
+		@Option(SHORT_PRIMITIVE_OPTION)
 		private short shortValue;
 
-		@Option("-S")
+		@Option(SHORT_OBJECT_OPTION)
 		private Short shortObjectValue;
 
-		@Option("-l")
+		@Option(LONG_PRIMITIVE_OPTION)
 		private long longValue;
 
-		@Option("-L")
+		@Option(LONG_OBJECT_OPTION)
 		private Long longObjectValue;
 
-		@Option("-d")
+		@Option(DOUBLE_PRIMITIVE_OPTION)
 		private double doubleValue;
 
-		@Option("-D")
+		@Option(DOUBLE_OBJECT_OPTION)
 		private Double doubleObjectValue;
 
-		@Option("-f")
+		@Option(FLOAT_PRIMITIVE_OPTION)
 		private float floatValue;
 
-		@Option("-F")
+		@Option(FLOAT_OBJECT_OPTION)
 		private Float floatObjectValue;
+
+		@Option(BOOLEAN_PRIMITIVE_OPTION)
+		private boolean booleanValue;
+
+		@Option(BOOLEAN_OBJECT_OPTION)
+		private Boolean booleanObjectValue;
 
 		@Option("-u")
 		private Object unsupportedValue;

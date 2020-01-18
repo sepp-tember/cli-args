@@ -1,6 +1,6 @@
 package net.sepptember.lib.cliargs.internal;
 
-public class ByteTransformer extends NumberTransformer<Byte> {
+public class ByteTransformer extends TransformerSupport<Byte> {
 	ByteTransformer() {
 		super(Byte.class);
 	}

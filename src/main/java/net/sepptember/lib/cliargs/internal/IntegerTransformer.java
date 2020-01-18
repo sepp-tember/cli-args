@@ -1,6 +1,6 @@
 package net.sepptember.lib.cliargs.internal;
 
-public class IntegerTransformer extends NumberTransformer<Integer> {
+public class IntegerTransformer extends TransformerSupport<Integer> {
 	IntegerTransformer() {
 		super(Integer.class);
 	}

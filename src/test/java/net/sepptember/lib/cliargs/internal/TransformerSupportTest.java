@@ -7,10 +7,10 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
-class NumberTransformerTest {
+class TransformerSupportTest {
 	@Test
 	public void testConstructorThrowsNullPointerExceptionWhenTransformationTypeIsNull() {
-		assertThrows(NullPointerException.class, () -> new NumberTransformer<Integer>(null) {
+		assertThrows(NullPointerException.class, () -> new TransformerSupport<Integer>(null) {
 			@Override
 			protected Integer unguardedTransform(String value) {
 				return null;
@@ -34,7 +34,7 @@ class NumberTransformerTest {
 
 	@Test
 	public void testTransformReturnsNullWhenGivenValueIsNull() throws TransformationFailedException {
-		NumberTransformer<Integer> transformer = new NumberTransformer<>(Integer.class) {
+		TransformerSupport<Integer> transformer = new TransformerSupport<>(Integer.class) {
 			@Override
 			protected Integer unguardedTransform(String value) {
 				return 3;
@@ -46,7 +46,7 @@ class NumberTransformerTest {
 	@Test
 	public void testTransformThrowsTransformationFailedExceptionWrappingExceptionThrownInUnguardedTransform() {
 		RuntimeException exception = new RuntimeException();
-		NumberTransformer<Integer> transformer = new NumberTransformer<>(Integer.class) {
+		TransformerSupport<Integer> transformer = new TransformerSupport<>(Integer.class) {
 			@Override
 			protected Integer unguardedTransform(String value) {
 				throw exception;
@@ -64,7 +64,7 @@ class NumberTransformerTest {
 
 	@Test
 	public void testTransformThrowsTransformationFailedExceptionWithTransformationTypeInfoWhenUnguardedTransformThrowsSomeException() {
-		NumberTransformer<Integer> transformer = new NumberTransformer<>(Integer.class) {
+		TransformerSupport<Integer> transformer = new TransformerSupport<>(Integer.class) {
 			@Override
 			protected Integer unguardedTransform(String value) {
 				throw new RuntimeException();
@@ -80,7 +80,7 @@ class NumberTransformerTest {
 		fail("Expected TransformationFailedException to be thrown but was not.");
 	}
 
-	private static class NumberTransformerSpy extends NumberTransformer<Integer> {
+	private static class NumberTransformerSpy extends TransformerSupport<Integer> {
 		private boolean unguardedTransformHasBeenCalled = false;
 
 		NumberTransformerSpy() {

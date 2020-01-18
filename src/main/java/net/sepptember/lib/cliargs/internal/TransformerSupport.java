@@ -1,9 +1,9 @@
 package net.sepptember.lib.cliargs.internal;
 
-public abstract class NumberTransformer<T extends Number> implements Transformer<T> {
+public abstract class TransformerSupport<T> implements Transformer<T> {
 	private final Class<T> transformationType;
 
-	NumberTransformer(Class<T> transformationType) {
+	TransformerSupport(Class<T> transformationType) {
 		if (transformationType == null) {
 			throw new NullPointerException("Transformation type must be given but was 'null'");
 		}

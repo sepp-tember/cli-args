@@ -127,6 +127,24 @@ class TransformerFactoryTest {
 	}
 
 	@Test
+	public void testCreateTransformerForBooleanObjectFieldReturnsBooleanTransformer()
+			throws NoSuchFieldException, NoSuchTransformerException {
+		Field booleanObjectField = Fields.class.getDeclaredField("booleanObjectField");
+		TransformerFactory factory = new TransformerFactory();
+
+		assertThat(factory.createTransformerFor(booleanObjectField), isA(BooleanTransformer.class));
+	}
+
+	@Test
+	public void testCreateTransformerForBooleanFieldReturnsBooleanTransformer()
+			throws NoSuchFieldException, NoSuchTransformerException {
+		Field booleanField = Fields.class.getDeclaredField("booleanField");
+		TransformerFactory factory = new TransformerFactory();
+
+		assertThat(factory.createTransformerFor(booleanField), isA(BooleanTransformer.class));
+	}
+
+	@Test
 	public void testCreateTransformerForObjectFieldThrowsException() throws NoSuchFieldException {
 		Field objectField = Fields.class.getDeclaredField("objectField");
 		TransformerFactory factory = new TransformerFactory();
@@ -148,6 +166,8 @@ class TransformerFactoryTest {
 		double doubleField;
 		Float floatObjectField;
 		float floatField;
+		Boolean booleanObjectField;
+		boolean booleanField;
 		Object objectField;
 	}
 }

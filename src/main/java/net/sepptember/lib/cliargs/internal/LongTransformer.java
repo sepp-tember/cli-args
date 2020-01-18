@@ -1,6 +1,6 @@
 package net.sepptember.lib.cliargs.internal;
 
-public class LongTransformer extends NumberTransformer<Long> {
+public class LongTransformer extends TransformerSupport<Long> {
 	LongTransformer() {
 		super(Long.class);
 	}

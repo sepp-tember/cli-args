@@ -1,6 +1,6 @@
 package net.sepptember.lib.cliargs.internal;
 
-public class ShortTransformer extends NumberTransformer<Short> {
+public class ShortTransformer extends TransformerSupport<Short> {
 	ShortTransformer() {
 		super(Short.class);
 	}
