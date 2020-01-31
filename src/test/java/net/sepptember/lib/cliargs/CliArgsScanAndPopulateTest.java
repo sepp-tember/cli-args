@@ -157,20 +157,27 @@ public class CliArgsScanAndPopulateTest {
 	public void testTargetBooleanOptionIsSetWhenOptionIsPresentInArgs() {
 		Target target = new Target();
 
-		boolean expectedValue = true;
-		String[] args = {BOOLEAN_PRIMITIVE_OPTION, Boolean.toString(expectedValue)};
+		String[] args = {BOOLEAN_PRIMITIVE_OPTION, Boolean.toString(true)};
 
-		assertThat(CliArgs.scan(target).andPopulateWith(args).booleanValue, is(equalTo(expectedValue)));
+		assertThat(CliArgs.scan(target).andPopulateWith(args).booleanValue, is(equalTo(true)));
+	}
+
+	@Test
+	public void testTargetBooleanOptionIsSetWhenOptionIsPresentWithoutValueInArgs() {
+		Target target = new Target();
+
+		String[] args = {BOOLEAN_PRIMITIVE_OPTION};
+
+		assertThat(CliArgs.scan(target).andPopulateWith(args).booleanValue, is(equalTo(true)));
 	}
 
 	@Test
 	public void testTargetBooleanObjectOptionIsSetWhenOptionIsPresentInArgs() {
 		Target target = new Target();
 
-		boolean expectedValue = true;
-		String[] args = {BOOLEAN_OBJECT_OPTION, Boolean.toString(expectedValue)};
+		String[] args = {BOOLEAN_OBJECT_OPTION, Boolean.toString(true)};
 
-		assertThat(CliArgs.scan(target).andPopulateWith(args).booleanObjectValue, is(equalTo(expectedValue)));
+		assertThat(CliArgs.scan(target).andPopulateWith(args).booleanObjectValue, is(equalTo(true)));
 	}
 
 	@Test
@@ -198,7 +205,7 @@ public class CliArgsScanAndPopulateTest {
 		assertThat(CliArgs.scan(null).andPopulateWith(args), is(nullValue()));
 	}
 
-	private class Target {
+	private static class Target {
 		@Option(STRING_OPTION)
 		private String stringValue;
 

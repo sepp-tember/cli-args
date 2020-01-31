@@ -5,6 +5,7 @@ import org.mockito.Mockito;
 
 import java.lang.reflect.Field;
 
+import static net.sepptember.lib.cliargs.internal.TransformerTestUtil.mockTransformer;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.*;
@@ -121,17 +122,27 @@ class SeparatedOptionFilterTest {
 	public void testProcessUsesTransformerWhenSettingValueInTargetField() throws TransformationFailedException {
 		String inputValue = "13";
 		String outputValue = "17";
-		Transformer transformer = mock(Transformer.class);
-		when(transformer.transform(inputValue)).thenReturn(outputValue);
+		Transformer<String> transformer = mockTransformer();
+		when(transformer.transform(ImmutableList.of(inputValue))).thenReturn(new Transformer.Result<>() {
+			@Override
+			public String getValue() {
+				return outputValue;
+			}
+
+			@Override
+			public ImmutableList<String> getRemainingArguments() {
+				return ImmutableList.of();
+			}
+		});
 		SeparatedOptionFilter filter = new SeparatedOptionFilter(scanTarget, field, optionName, transformer);
 
 		filter.process(ImmutableList.of(optionName, inputValue));
 
 		assertThat(scanTarget.option, is(equalTo(outputValue)));
-		verify(transformer).transform(inputValue);
+		verify(transformer).transform(ImmutableList.of(inputValue));
 	}
 
-	private class Target {
+	private static class Target {
 		private String option;
 	}
 }

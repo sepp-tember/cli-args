@@ -2,34 +2,87 @@ package net.sepptember.lib.cliargs.internal;
 
 import org.junit.jupiter.api.Test;
 
+import static net.sepptember.lib.cliargs.internal.TransformerTestUtil.testTransformOf;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class ByteTransformerTest {
 	@Test
-	public void testTransformByteAsStringToByte() {
-		assertAll(
-				() -> assertThat(new ByteTransformer().transform("127"), is((byte) 127)),
-				() -> assertThat(new ByteTransformer().transform("-128"), is((byte) -128))
-		);
+	public void testTransformReturnsByteAsValueWhenHighestByteIsGivenAsArgument()
+			throws TransformationFailedException {
+		testTransformOf(new ByteTransformer())
+				.with(ImmutableList.of("127"))
+				.verifyValue(value -> assertThat(value, is((byte) 127)));
 	}
 
 	@Test
-	public void testTransformThrowsTransformationFailedExceptionWhenGivenStringIsNoByte() {
+	public void testTransformReturnsByteAsValueWhenLowestByteIsGivenAsArgument()
+			throws TransformationFailedException {
+		testTransformOf(new ByteTransformer())
+				.with(ImmutableList.of("-128"))
+				.verifyValue(value -> assertThat(value, is((byte) -128)));
+	}
+
+	@Test
+	public void testTransformReturnsNullAsValueIfNullIsGivenAsArgument() throws TransformationFailedException {
+		testTransformOf(new ByteTransformer())
+				.with(ImmutableList.of((String) null))
+				.verifyValue(value -> assertThat(value, is(nullValue())));
+	}
+
+	@Test
+	public void testTransformThrowsTransformationFailedExceptionWhenGivenArgumentIsNoByte() {
 		ByteTransformer transformer = new ByteTransformer();
 		assertAll(
-				() -> assertThrows(TransformationFailedException.class, () -> transformer.transform("abc")),
-				() -> assertThrows(TransformationFailedException.class, () -> transformer.transform("1 def")),
-				() -> assertThrows(TransformationFailedException.class, () -> transformer.transform("1.1")),
-				() -> assertThrows(TransformationFailedException.class, () -> transformer.transform("128")),
-				() -> assertThrows(TransformationFailedException.class, () -> transformer.transform("-129"))
+				() -> testTransformOf(transformer)
+						.with(ImmutableList.of("abc"))
+						.willThrow(TransformationFailedException.class),
+				() -> testTransformOf(transformer)
+						.with(ImmutableList.of("1 def"))
+						.willThrow(TransformationFailedException.class),
+				() -> testTransformOf(transformer)
+						.with(ImmutableList.of("1.1"))
+						.willThrow(TransformationFailedException.class),
+				() -> testTransformOf(transformer)
+						.with(ImmutableList.of("2147483648"))
+						.willThrow(TransformationFailedException.class),
+				() -> testTransformOf(transformer).
+						with(ImmutableList.of("-2147483649"))
+						.willThrow(TransformationFailedException.class)
 		);
 	}
 
 	@Test
-	public void testTransformReturnsNullIfNullIsGiven() throws TransformationFailedException {
-		assertThat(new ByteTransformer().transform(null), is(nullValue()));
+	public void testTransformThrowsTransformationFailedExceptionWhenNoArgumentIsGiven() {
+		testTransformOf(new ByteTransformer())
+				.with(ImmutableList.of())
+				.willThrow(TransformationFailedException.class);
+	}
+
+	@Test
+	public void testTransformThrowsTransformationFailedExceptionWhenNullIsGivenAsArgumentList() {
+		testTransformOf(new ByteTransformer()).with(null).willThrow(TransformationFailedException.class);
+	}
+
+	@Test
+	public void testTransformReturnsGivenArgumentListWithoutByteArgument() throws TransformationFailedException {
+		testTransformOf(new ByteTransformer())
+				.with(ImmutableList.of("123", "some", "other", "arguments"))
+				.verifyRemainingArguments(arguments -> assertThat(arguments, contains("some", "other", "arguments")));
+	}
+
+	@Test
+	public void testTransformReturnsEmptyArgumentListWhenOnlyByteArgumentIsGiven() throws TransformationFailedException {
+		testTransformOf(new ByteTransformer())
+				.with(ImmutableList.of("123"))
+				.verifyRemainingArguments(arguments -> assertThat(arguments, is(emptyIterable())));
+	}
+
+	@Test
+	public void testTransformReturnsGivenArgumentListWithoutNullArgument() throws TransformationFailedException {
+		testTransformOf(new ByteTransformer())
+				.with(ImmutableList.of(null, "some", "other", "arguments"))
+				.verifyRemainingArguments(arguments -> assertThat(arguments, contains("some", "other", "arguments")));
 	}
 }

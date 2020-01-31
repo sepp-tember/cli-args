@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 public class SeparatedOptionFilter {
 	private final Object target;
 	private final Field field;
-	private final Transformer transformer;
+	private final Transformer<?> transformer;
 	private final String option;
 	private SeparatedOptionFilter nextFilter;
 
@@ -13,7 +13,7 @@ public class SeparatedOptionFilter {
 		this(target, field, option, new TransformerFactory().createTransformerFor(field));
 	}
 
-	SeparatedOptionFilter(Object target, Field field, String option, Transformer transformer) {
+	SeparatedOptionFilter(Object target, Field field, String option, Transformer<?> transformer) {
 		this.target = target;
 		this.field = field;
 		field.setAccessible(true);
@@ -23,9 +23,13 @@ public class SeparatedOptionFilter {
 
 	public ImmutableList<String> process(ImmutableList<String> args) {
 		if (!args.isEmpty() && option.equals(args.get(0))) {
-			if (args.size() > 1) {
+			if (!args.isEmpty()) {
+				int size = args.size();
 				try {
-					field.set(target, transformer.transform(args.get(1)));
+					Transformer.Result<?> result = transformer.transform(args.subList(1, size));
+					Object value = result.getValue();
+					field.set(target, value);
+					return result.getRemainingArguments();
 				} catch (IllegalAccessException e) {
 					// TODO use logger
 					e.printStackTrace();
@@ -33,7 +37,7 @@ public class SeparatedOptionFilter {
 					// TODO decide what to do when transformation fails
 					e.printStackTrace();
 				}
-				return args.subList(2, args.size());
+				return args.subList(Math.min(2, size), size);
 			} else {
 				return ImmutableList.of();
 			}

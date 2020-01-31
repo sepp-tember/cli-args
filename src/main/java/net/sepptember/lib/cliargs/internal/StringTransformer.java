@@ -1,8 +1,12 @@
 package net.sepptember.lib.cliargs.internal;
 
-public class StringTransformer implements Transformer<String> {
+public class StringTransformer extends AbstractSingleArgumentTransformer<String> {
+	StringTransformer() {
+		super(String.class);
+	}
+
 	@Override
-	public String transform(String value) {
-		return value;
+	protected String unguardedTransform(String argument) {
+		return argument;
 	}
 }

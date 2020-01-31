@@ -24,7 +24,7 @@ class TransformerFactory {
 			Map.entry(boolean.class, BooleanTransformer::new)
 	);
 
-	Transformer createTransformerFor(Field field) throws NoSuchTransformerException {
+	Transformer<?> createTransformerFor(Field field) throws NoSuchTransformerException {
 		Class<?> fieldType = field.getType();
 		if (mapping.containsKey(fieldType)) {
 			return mapping.get(fieldType).get();

@@ -2,34 +2,87 @@ package net.sepptember.lib.cliargs.internal;
 
 import org.junit.jupiter.api.Test;
 
+import static net.sepptember.lib.cliargs.internal.TransformerTestUtil.testTransformOf;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ShortTransformerTest {
 	@Test
-	public void testTransformShortAsStringToShort() {
-		assertAll(
-				() -> assertThat(new ShortTransformer().transform("32767"), is((short) 32767)),
-				() -> assertThat(new ShortTransformer().transform("-32768"), is((short) -32768))
-		);
+	public void testTransformReturnsShortAsValueWhenHighestShortIsGivenAsArgument()
+			throws TransformationFailedException {
+		testTransformOf(new ShortTransformer())
+				.with(ImmutableList.of("32767"))
+				.verifyValue(value -> assertThat(value, is((short) 32767)));
 	}
 
 	@Test
-	public void testTransformThrowsTransformationFailedExceptionWhenGivenStringIsNoShort() {
+	public void testTransformReturnsShortAsValueWhenLowestShortIsGivenAsArgument()
+			throws TransformationFailedException {
+		testTransformOf(new ShortTransformer())
+				.with(ImmutableList.of("-32768"))
+				.verifyValue(value -> assertThat(value, is((short) -32768)));
+	}
+
+	@Test
+	public void testTransformReturnsNullAsValueIfNullIsGivenAsArgument() throws TransformationFailedException {
+		testTransformOf(new ShortTransformer())
+				.with(ImmutableList.of((String) null))
+				.verifyValue(value -> assertThat(value, is(nullValue())));
+	}
+
+	@Test
+	public void testTransformThrowsTransformationFailedExceptionWhenGivenArgumentIsNoShort() {
 		ShortTransformer transformer = new ShortTransformer();
 		assertAll(
-				() -> assertThrows(TransformationFailedException.class, () -> transformer.transform("abc")),
-				() -> assertThrows(TransformationFailedException.class, () -> transformer.transform("1 def")),
-				() -> assertThrows(TransformationFailedException.class, () -> transformer.transform("1.1")),
-				() -> assertThrows(TransformationFailedException.class, () -> transformer.transform("32768")),
-				() -> assertThrows(TransformationFailedException.class, () -> transformer.transform("-32769"))
+				() -> testTransformOf(transformer)
+						.with(ImmutableList.of("abc"))
+						.willThrow(TransformationFailedException.class),
+				() -> testTransformOf(transformer)
+						.with(ImmutableList.of("1 def"))
+						.willThrow(TransformationFailedException.class),
+				() -> testTransformOf(transformer)
+						.with(ImmutableList.of("1.1"))
+						.willThrow(TransformationFailedException.class),
+				() -> testTransformOf(transformer)
+						.with(ImmutableList.of("32768"))
+						.willThrow(TransformationFailedException.class),
+				() -> testTransformOf(transformer).
+						with(ImmutableList.of("-32769"))
+						.willThrow(TransformationFailedException.class)
 		);
 	}
 
 	@Test
-	public void testTransformReturnsNullIfNullIsGiven() throws TransformationFailedException {
-		assertThat(new ShortTransformer().transform(null), is(nullValue()));
+	public void testTransformThrowsTransformationFailedExceptionWhenNoArgumentIsGiven() {
+		testTransformOf(new ShortTransformer())
+				.with(ImmutableList.of())
+				.willThrow(TransformationFailedException.class);
+	}
+
+	@Test
+	public void testTransformThrowsTransformationFailedExceptionWhenNullIsGivenAsArgumentList() {
+		testTransformOf(new ShortTransformer()).with(null).willThrow(TransformationFailedException.class);
+	}
+
+	@Test
+	public void testTransformReturnsGivenArgumentListWithoutShortArgument() throws TransformationFailedException {
+		testTransformOf(new ShortTransformer())
+				.with(ImmutableList.of("123", "some", "other", "arguments"))
+				.verifyRemainingArguments(arguments -> assertThat(arguments, contains("some", "other", "arguments")));
+	}
+
+	@Test
+	public void testTransformReturnsEmptyArgumentListWhenOnlyShortArgumentIsGiven() throws TransformationFailedException {
+		testTransformOf(new ShortTransformer())
+				.with(ImmutableList.of("123"))
+				.verifyRemainingArguments(arguments -> assertThat(arguments, is(emptyIterable())));
+	}
+
+	@Test
+	public void testTransformReturnsGivenArgumentListWithoutNullArgument() throws TransformationFailedException {
+		testTransformOf(new ShortTransformer())
+				.with(ImmutableList.of(null, "some", "other", "arguments"))
+				.verifyRemainingArguments(arguments -> assertThat(arguments, contains("some", "other", "arguments")));
 	}
 }

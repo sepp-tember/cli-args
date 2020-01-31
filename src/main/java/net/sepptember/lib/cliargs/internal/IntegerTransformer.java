@@ -1,12 +1,12 @@
 package net.sepptember.lib.cliargs.internal;
 
-public class IntegerTransformer extends TransformerSupport<Integer> {
+public class IntegerTransformer extends AbstractSingleArgumentTransformer<Integer> {
 	IntegerTransformer() {
 		super(Integer.class);
 	}
 
 	@Override
-	protected Integer unguardedTransform(String value) {
-		return Integer.parseInt(value);
+	protected Integer unguardedTransform(String argument) {
+		return Integer.parseInt(argument);
 	}
 }

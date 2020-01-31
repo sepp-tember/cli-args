@@ -1,9 +1,6 @@
 package net.sepptember.lib.cliargs.internal;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("WeakerAccess")
 public class ImmutableList<E> implements Iterable<E> {
@@ -15,7 +12,7 @@ public class ImmutableList<E> implements Iterable<E> {
 
 	@SafeVarargs
 	public static <E> ImmutableList<E> of(E... elements) {
-		return new ImmutableList<>(List.of(elements));
+		return new ImmutableList<>(new ArrayList<>(Arrays.asList(elements)));
 	}
 
 	public E get(int index) {
@@ -89,5 +86,22 @@ public class ImmutableList<E> implements Iterable<E> {
 		public void remove() {
 			throw new UnsupportedOperationException("Remove is not supported for immutable iterator");
 		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		ImmutableList<?> that = (ImmutableList<?>) o;
+		return backingList.equals(that.backingList);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(backingList);
 	}
 }
