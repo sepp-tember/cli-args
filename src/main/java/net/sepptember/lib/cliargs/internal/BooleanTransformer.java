@@ -2,10 +2,15 @@ package net.sepptember.lib.cliargs.internal;
 
 public class BooleanTransformer implements Transformer<Boolean> {
 	@Override
+	public Class<Boolean> resultType() {
+		return Boolean.class;
+	}
+
+	@Override
 	public Result<Boolean> transform(ImmutableList<String> arguments) throws TransformationFailedException {
 		if (arguments == null) {
 			throw new TransformationFailedException(
-					Boolean.class,
+					resultType(),
 					new NullPointerException("Argument list must not be null")
 			);
 		}

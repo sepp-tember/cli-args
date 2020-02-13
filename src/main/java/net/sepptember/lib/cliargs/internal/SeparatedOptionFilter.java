@@ -10,7 +10,7 @@ public class SeparatedOptionFilter {
 	private SeparatedOptionFilter nextFilter;
 
 	public SeparatedOptionFilter(Object target, Field field, String option) throws NoSuchTransformerException {
-		this(target, field, option, new TransformerFactory().createTransformerFor(field));
+		this(target, field, option, new TransformerFactory().createTransformerFor(field.getType()));
 	}
 
 	SeparatedOptionFilter(Object target, Field field, String option, Transformer<?> transformer) {
@@ -23,24 +23,20 @@ public class SeparatedOptionFilter {
 
 	public ImmutableList<String> process(ImmutableList<String> args) {
 		if (!args.isEmpty() && option.equals(args.get(0))) {
-			if (!args.isEmpty()) {
-				int size = args.size();
-				try {
-					Transformer.Result<?> result = transformer.transform(args.subList(1, size));
-					Object value = result.getValue();
-					field.set(target, value);
-					return result.getRemainingArguments();
-				} catch (IllegalAccessException e) {
-					// TODO use logger
-					e.printStackTrace();
-				} catch (TransformationFailedException e) {
-					// TODO decide what to do when transformation fails
-					e.printStackTrace();
-				}
-				return args.subList(Math.min(2, size), size);
-			} else {
-				return ImmutableList.of();
+			int size = args.size();
+			try {
+				Transformer.Result<?> result = transformer.transform(args.subList(1, size));
+				Object value = result.getValue();
+				field.set(target, value);
+				return result.getRemainingArguments();
+			} catch (IllegalAccessException e) {
+				// TODO use logger
+				e.printStackTrace();
+			} catch (TransformationFailedException e) {
+				// TODO decide what to do when transformation fails
+				e.printStackTrace();
 			}
+			return args.subList(Math.min(2, size), size);
 		} else {
 			if (nextFilter == null) {
 				return args;

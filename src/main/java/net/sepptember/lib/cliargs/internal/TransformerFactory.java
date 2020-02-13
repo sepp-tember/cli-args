@@ -1,34 +1,32 @@
 package net.sepptember.lib.cliargs.internal;
 
-import java.lang.reflect.Field;
-import java.util.Map;
-import java.util.function.Supplier;
+import java.util.List;
 
 class TransformerFactory {
 
-	private static final Map<Class<?>, Supplier<Transformer<?>>> mapping = Map.ofEntries(
-			Map.entry(String.class, StringTransformer::new),
-			Map.entry(Integer.class, IntegerTransformer::new),
-			Map.entry(int.class, IntegerTransformer::new),
-			Map.entry(Byte.class, ByteTransformer::new),
-			Map.entry(byte.class, ByteTransformer::new),
-			Map.entry(Short.class, ShortTransformer::new),
-			Map.entry(short.class, ShortTransformer::new),
-			Map.entry(Long.class, LongTransformer::new),
-			Map.entry(long.class, LongTransformer::new),
-			Map.entry(Double.class, DoubleTransformer::new),
-			Map.entry(double.class, DoubleTransformer::new),
-			Map.entry(Float.class, FloatTransformer::new),
-			Map.entry(float.class, FloatTransformer::new),
-			Map.entry(Boolean.class, BooleanTransformer::new),
-			Map.entry(boolean.class, BooleanTransformer::new)
+	private final List<Transformer<?>> transformers = List.of(
+			new StringTransformer(),
+			new IntegerTransformer(),
+			new IntegerPrimitiveTransformer(),
+			new ByteTransformer(),
+			new BytePrimitiveTransformer(),
+			new ShortTransformer(),
+			new ShortPrimitiveTransformer(),
+			new LongTransformer(),
+			new LongPrimitiveTransformer(),
+			new DoubleTransformer(),
+			new DoublePrimitiveTransformer(),
+			new FloatTransformer(),
+			new FloatPrimitiveTransformer(),
+			new BooleanTransformer(),
+			new BooleanPrimitiveTransformer()
 	);
 
-	Transformer<?> createTransformerFor(Field field) throws NoSuchTransformerException {
-		Class<?> fieldType = field.getType();
-		if (mapping.containsKey(fieldType)) {
-			return mapping.get(fieldType).get();
-		}
-		throw new NoSuchTransformerException(fieldType);
+	@SuppressWarnings("unchecked")
+	<T> Transformer<T> createTransformerFor(Class<T> type) throws NoSuchTransformerException {
+		return (Transformer<T>) transformers.stream()
+				.filter(transformer -> transformer.resultType() == type)
+				.findAny()
+				.orElseThrow(() -> new NoSuchTransformerException(type));
 	}
 }

@@ -8,6 +8,11 @@ public abstract class AbstractSingleArgumentTransformer<T> implements Transforme
 	}
 
 	@Override
+	public Class<T> resultType() {
+		return transformationType;
+	}
+
+	@Override
 	public Result<T> transform(ImmutableList<String> arguments) throws TransformationFailedException {
 		T value;
 		ImmutableList<String> remainingArguments;

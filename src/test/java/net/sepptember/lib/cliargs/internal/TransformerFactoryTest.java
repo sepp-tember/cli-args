@@ -2,172 +2,104 @@ package net.sepptember.lib.cliargs.internal;
 
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isA;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TransformerFactoryTest {
 	@Test
-	public void testCreateTransformerForStringFieldReturnsStringTransformer()
-			throws NoSuchFieldException, NoSuchTransformerException {
-		Field stringField = Fields.class.getDeclaredField("stringField");
+	public void testCreateTransformerForStringReturnsStringTransformer() throws NoSuchTransformerException {
 		TransformerFactory factory = new TransformerFactory();
-
-		assertThat(factory.createTransformerFor(stringField), isA(StringTransformer.class));
+		assertThat(factory.createTransformerFor(String.class), isA(StringTransformer.class));
 	}
 
 	@Test
-	public void testCreateTransformerForIntegerObjectFieldReturnsIntegerTransformer()
-			throws NoSuchFieldException, NoSuchTransformerException {
-		Field integerField = Fields.class.getDeclaredField("integerObjectField");
+	public void testCreateTransformerForIntegerWrapperReturnsIntegerTransformer() throws NoSuchTransformerException {
 		TransformerFactory factory = new TransformerFactory();
-
-		assertThat(factory.createTransformerFor(integerField), isA(IntegerTransformer.class));
+		assertThat(factory.createTransformerFor(Integer.class), isA(IntegerTransformer.class));
 	}
 
 	@Test
-	public void testCreateTransformerForIntFieldReturnsIntegerTransformer()
-			throws NoSuchFieldException, NoSuchTransformerException {
-		Field intField = Fields.class.getDeclaredField("intField");
+	public void testCreateTransformerForPrimitiveIntReturnsIntegerTransformer() throws NoSuchTransformerException {
 		TransformerFactory factory = new TransformerFactory();
-
-		assertThat(factory.createTransformerFor(intField), isA(IntegerTransformer.class));
+		assertThat(factory.createTransformerFor(int.class), isA(IntegerPrimitiveTransformer.class));
 	}
 
 	@Test
-	public void testCreateTransformerForByteObjectFieldReturnsByteTransformer()
-			throws NoSuchFieldException, NoSuchTransformerException {
-		Field byteObjectField = Fields.class.getDeclaredField("byteObjectField");
+	public void testCreateTransformerForByteWrapperReturnsByteTransformer() throws NoSuchTransformerException {
 		TransformerFactory factory = new TransformerFactory();
-
-		assertThat(factory.createTransformerFor(byteObjectField), isA(ByteTransformer.class));
+		assertThat(factory.createTransformerFor(Byte.class), isA(ByteTransformer.class));
 	}
 
 	@Test
-	public void testCreateTransformerForByteFieldReturnsByteTransformer()
-			throws NoSuchFieldException, NoSuchTransformerException {
-		Field byteField = Fields.class.getDeclaredField("byteField");
+	public void testCreateTransformerForPrimitiveByteReturnsByteTransformer() throws NoSuchTransformerException {
 		TransformerFactory factory = new TransformerFactory();
-
-		assertThat(factory.createTransformerFor(byteField), isA(ByteTransformer.class));
+		assertThat(factory.createTransformerFor(byte.class), isA(BytePrimitiveTransformer.class));
 	}
 
 	@Test
-	public void testCreateTransformerForShortObjectFieldReturnsShortTransformer()
-			throws NoSuchFieldException, NoSuchTransformerException {
-		Field shortObjectField = Fields.class.getDeclaredField("shortObjectField");
+	public void testCreateTransformerForShortWrapperReturnsShortTransformer() throws NoSuchTransformerException {
 		TransformerFactory factory = new TransformerFactory();
-
-		assertThat(factory.createTransformerFor(shortObjectField), isA(ShortTransformer.class));
+		assertThat(factory.createTransformerFor(Short.class), isA(ShortTransformer.class));
 	}
 
 	@Test
-	public void testCreateTransformerForShortFieldReturnsShortTransformer()
-			throws NoSuchFieldException, NoSuchTransformerException {
-		Field shortField = Fields.class.getDeclaredField("shortField");
+	public void testCreateTransformerForPrimitiveShortReturnsShortTransformer() throws NoSuchTransformerException {
 		TransformerFactory factory = new TransformerFactory();
-
-		assertThat(factory.createTransformerFor(shortField), isA(ShortTransformer.class));
+		assertThat(factory.createTransformerFor(short.class), isA(ShortPrimitiveTransformer.class));
 	}
 
 	@Test
-	public void testCreateTransformerForLongObjectFieldReturnsLongTransformer()
-			throws NoSuchFieldException, NoSuchTransformerException {
-		Field longObjectField = Fields.class.getDeclaredField("longObjectField");
+	public void testCreateTransformerForLongWrapperReturnsLongTransformer() throws NoSuchTransformerException {
 		TransformerFactory factory = new TransformerFactory();
-
-		assertThat(factory.createTransformerFor(longObjectField), isA(LongTransformer.class));
+		assertThat(factory.createTransformerFor(Long.class), isA(LongTransformer.class));
 	}
 
 	@Test
-	public void testCreateTransformerForLongFieldReturnsLongTransformer()
-			throws NoSuchFieldException, NoSuchTransformerException {
-		Field longField = Fields.class.getDeclaredField("longField");
+	public void testCreateTransformerForPrimitiveLongReturnsLongTransformer() throws NoSuchTransformerException {
 		TransformerFactory factory = new TransformerFactory();
-
-		assertThat(factory.createTransformerFor(longField), isA(LongTransformer.class));
+		assertThat(factory.createTransformerFor(long.class), isA(LongPrimitiveTransformer.class));
 	}
 
 	@Test
-	public void testCreateTransformerForDoubleObjectFieldReturnsDoubleTransformer()
-			throws NoSuchFieldException, NoSuchTransformerException {
-		Field doubleObjectField = Fields.class.getDeclaredField("doubleObjectField");
+	public void testCreateTransformerForDoubleWrapperReturnsDoubleTransformer() throws NoSuchTransformerException {
 		TransformerFactory factory = new TransformerFactory();
-
-		assertThat(factory.createTransformerFor(doubleObjectField), isA(DoubleTransformer.class));
+		assertThat(factory.createTransformerFor(Double.class), isA(DoubleTransformer.class));
 	}
 
 	@Test
-	public void testCreateTransformerForDoubleFieldReturnsDoubleTransformer()
-			throws NoSuchFieldException, NoSuchTransformerException {
-		Field doubleField = Fields.class.getDeclaredField("doubleField");
+	public void testCreateTransformerForPrimitiveDoubleReturnsDoubleTransformer() throws NoSuchTransformerException {
 		TransformerFactory factory = new TransformerFactory();
-
-		assertThat(factory.createTransformerFor(doubleField), isA(DoubleTransformer.class));
+		assertThat(factory.createTransformerFor(double.class), isA(DoublePrimitiveTransformer.class));
 	}
 
 	@Test
-	public void testCreateTransformerForFloatObjectFieldReturnsFloatTransformer()
-			throws NoSuchFieldException, NoSuchTransformerException {
-		Field floatObjectField = Fields.class.getDeclaredField("floatObjectField");
+	public void testCreateTransformerForFloatWrapperReturnsFloatTransformer() throws NoSuchTransformerException {
 		TransformerFactory factory = new TransformerFactory();
-
-		assertThat(factory.createTransformerFor(floatObjectField), isA(FloatTransformer.class));
+		assertThat(factory.createTransformerFor(Float.class), isA(FloatTransformer.class));
 	}
 
 	@Test
-	public void testCreateTransformerForFloatFieldReturnsFloatTransformer()
-			throws NoSuchFieldException, NoSuchTransformerException {
-		Field floatField = Fields.class.getDeclaredField("floatField");
+	public void testCreateTransformerForPrimitiveFloatReturnsFloatTransformer() throws NoSuchTransformerException {
 		TransformerFactory factory = new TransformerFactory();
-
-		assertThat(factory.createTransformerFor(floatField), isA(FloatTransformer.class));
+		assertThat(factory.createTransformerFor(float.class), isA(FloatPrimitiveTransformer.class));
 	}
 
 	@Test
-	public void testCreateTransformerForBooleanObjectFieldReturnsBooleanTransformer()
-			throws NoSuchFieldException, NoSuchTransformerException {
-		Field booleanObjectField = Fields.class.getDeclaredField("booleanObjectField");
+	public void testCreateTransformerForBooleanWrapperReturnsBooleanTransformer() throws NoSuchTransformerException {
 		TransformerFactory factory = new TransformerFactory();
-
-		assertThat(factory.createTransformerFor(booleanObjectField), isA(BooleanTransformer.class));
+		assertThat(factory.createTransformerFor(Boolean.class), isA(BooleanTransformer.class));
 	}
 
 	@Test
-	public void testCreateTransformerForBooleanFieldReturnsBooleanTransformer()
-			throws NoSuchFieldException, NoSuchTransformerException {
-		Field booleanField = Fields.class.getDeclaredField("booleanField");
+	public void testCreateTransformerForPrimitiveBooleanReturnsBooleanTransformer() throws NoSuchTransformerException {
 		TransformerFactory factory = new TransformerFactory();
-
-		assertThat(factory.createTransformerFor(booleanField), isA(BooleanTransformer.class));
+		assertThat(factory.createTransformerFor(boolean.class), isA(BooleanPrimitiveTransformer.class));
 	}
 
 	@Test
-	public void testCreateTransformerForObjectFieldThrowsException() throws NoSuchFieldException {
-		Field objectField = Fields.class.getDeclaredField("objectField");
+	public void testCreateTransformerForObjectThrowsException() {
 		TransformerFactory factory = new TransformerFactory();
-
-		assertThrows(NoSuchTransformerException.class, () -> factory.createTransformerFor(objectField));
-	}
-
-	private static class Fields {
-		String stringField;
-		Integer integerObjectField;
-		int intField;
-		Byte byteObjectField;
-		byte byteField;
-		Short shortObjectField;
-		short shortField;
-		Long longObjectField;
-		long longField;
-		Double doubleObjectField;
-		double doubleField;
-		Float floatObjectField;
-		float floatField;
-		Boolean booleanObjectField;
-		boolean booleanField;
-		Object objectField;
+		assertThrows(NoSuchTransformerException.class, () -> factory.createTransformerFor(Object.class));
 	}
 }
